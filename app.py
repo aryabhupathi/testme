@@ -1,6 +1,8 @@
 from flask import Flask
 import os
-app = create_app()
+
+app = Flask(__name__)
+
 @app.route("/")
 def home():
     return "Railway Flask App Working!"
