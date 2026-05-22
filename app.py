@@ -4,8 +4,8 @@ import os
 app = Flask(__name__)
 
 @app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+def home():
+    return "Railway Flask App Working!"
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
