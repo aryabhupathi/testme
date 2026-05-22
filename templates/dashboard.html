@@ -1,0 +1,25 @@
+{% extends "site_base.html" %}
+
+{% block title %}Dashboard | Demo QA Site{% endblock %}
+
+{% block content %}
+  <section class="hero compact-hero">
+    <div>
+      <p class="eyebrow">Protected page</p>
+      <h1>Welcome, {{ user.name }}</h1>
+      <p class="lead" id="dashboard-welcome">
+        You are logged in. This page is useful for validating successful login redirects.
+      </p>
+      <div class="hero-actions">
+        <a class="primary-link" href="{{ url_for('demo_services') }}">Explore Services</a>
+        <a class="secondary-link" href="{{ url_for('demo_logout') }}">Logout</a>
+      </div>
+    </div>
+    <div class="status-panel">
+      <strong>Account</strong>
+      <span>{{ user.email }}</span>
+      <span>{{ stats.users }} total users</span>
+      <span>{{ stats.login_attempts }} login attempts</span>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QA Test Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="testingSidebar" aria-label="Testing type sidebar">
+        <div class="brand">
+          <div class="brand-mark">QA</div>
+          <div>
+            <h1>Test Manager</h1>
+            <p>Flask + SQLite quality workspace</p>
+          </div>
+          <button class="sidebar-close" id="sidebarCloseBtn" type="button" aria-label="Close testing type menu">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+
+        <nav class="nav-list" aria-label="Testing type shortcuts" id="typeNav"></nav>
+      </aside>
+      <div class="sidebar-backdrop hidden" id="sidebarBackdrop"></div>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="topbar-heading">
+            <button class="sidebar-toggle-button" id="sidebarToggleBtn" type="button" aria-label="Open testing type menu" aria-expanded="false" aria-controls="testingSidebar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+            <div>
+              <p class="eyebrow">Testing command center</p>
+              <h2>Store, analyze, and track test cases</h2>
+            </div>
+          </div>
+          <div class="topbar-actions">
+            <button class="ghost-button" id="pdfDownloadBtn" type="button">Download PDF</button>
+            <button class="ghost-button" id="exportBtn" type="button">Export JSON</button>
+            <label class="ghost-button file-picker" for="importFile">Import JSON</label>
+            <input id="importFile" type="file" accept="application/json">
+            <button class="danger-button" id="resetDemoBtn" type="button">Reset Demo</button>
+            <div class="menu-wrap">
+              <button class="hamburger-button" id="menuToggleBtn" type="button" aria-label="Open testing menu" aria-expanded="false" aria-controls="quickMenu" aria-haspopup="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </button>
+              <div class="quick-menu hidden" id="quickMenu" role="menu">
+                <button type="button" data-target="basicAutomationPanel">Basic automation testing</button>
+                <button type="button" data-target="realtimeAutomationPanel">real-time automation testing</button>
+                <button type="button" data-target="realtimeApiPanel">real-time API testing</button>
+                <button type="button" data-target="manualTestingPanel">Manual testing</button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="metrics-grid" aria-label="Testing analytics">
+          <article class="metric">
+            <span>Total Cases</span>
+            <strong id="metricTotal">0</strong>
+            <small id="metricActive">0 active</small>
+          </article>
+          <article class="metric">
+            <span>Pass Rate</span>
+            <strong id="metricPassRate">0%</strong>
+            <small id="metricPassed">0 passed</small>
+          </article>
+          <article class="metric">
+            <span>Open Risk</span>
+            <strong id="metricRisk">0</strong>
+            <small id="metricCritical">0 critical open</small>
+          </article>
+          <article class="metric">
+            <span>Automation</span>
+            <strong id="metricAutomation">0%</strong>
+            <small>automated coverage</small>
+          </article>
+        </section>
+
+        <section class="panel live-panel" id="basicAutomationPanel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Real page testing</p>
+              <h3>Run checks against any website</h3>
+            </div>
+            <span class="live-pill" id="liveRunStatus">No run yet</span>
+          </div>
+
+          <div class="live-grid">
+            <form id="liveTestForm" class="live-form">
+              <label>
+                Website URL
+                <input id="liveBaseUrl" type="url" value="http://127.0.0.1:5000" placeholder="https://example.com" required>
+              </label>
+
+              <label>
+                Pages to Check
+                <textarea id="livePages" rows="4">/
+/login
+/signin
+/home
+/about
+/services</textarea>
+              </label>
+
+              <label>
+                Text or Labels to Find
+                <textarea id="liveKeywords" rows="3" placeholder="Optional: login, about, services, contact">Login
+Services
+Contact</textarea>
+              </label>
+
+              <label class="checkbox-label">
+                <input id="liveCheckLinks" type="checkbox" checked>
+                Check internal navigation links
+              </label>
+
+              <button class="primary-button" id="runLiveTestBtn" type="submit">Run Real Page Test</button>
+            </form>
+
+            <div class="live-output">
+              <div id="liveSummary" class="live-summary empty-state">Enter a website URL and run a test.</div>
+              <div id="liveResults" class="live-results"></div>
+            </div>
+          </div>
+
+          <div class="live-history-wrap">
+            <div class="chart-title">Recent live runs</div>
+            <div id="liveHistory" class="live-history empty-state">No live runs saved yet.</div>
+          </div>
+        </section>
+
+        <section class="panel automation-panel" id="realtimeAutomationPanel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Browser automation</p>
+              <h3>Run user-flow tests</h3>
+            </div>
+            <span class="live-pill" id="automationRunStatus">No run yet</span>
+          </div>
+
+          <div class="live-grid">
+            <form id="automationForm" class="live-form">
+              <label>
+                Scenario Name
+                <input id="automationScenario" type="text" value="Login and navigation flow" required>
+              </label>
+
+              <label>
+                Base URL
+                <input id="automationBaseUrl" type="url" value="http://127.0.0.1:5000" placeholder="https://example.com" required>
+              </label>
+
+              <label>
+                Automation Steps
+                <textarea id="automationSteps" rows="9">goto /login
+fill input[name="email"] = tester@example.com
+fill input[name="password"] = Password123!
+click button[type="submit"]
+expect_url dashboard
+expect_text Welcome
+goto /services
+click text=More Details
+expect_text includes planning
+goto /contact
+expect_text Contact</textarea>
+              </label>
+
+              <div class="field-grid">
+                <label>
+                  Timeout
+                  <select id="automationTimeout">
+                    <option value="5000">5 seconds</option>
+                    <option value="10000" selected>10 seconds</option>
+                    <option value="20000">20 seconds</option>
+                    <option value="30000">30 seconds</option>
+                  </select>
+                </label>
+                <label class="checkbox-label automation-check">
+                  <input id="automationHeadless" type="checkbox" checked>
+                  Headless browser
+                </label>
+              </div>
+
+              <button class="primary-button" id="runAutomationBtn" type="submit">Run Automation</button>
+            </form>
+
+            <div class="live-output">
+              <div id="automationSummary" class="live-summary empty-state">Create a scenario and run automation.</div>
+              <div id="automationResults" class="live-results"></div>
+            </div>
+          </div>
+
+          <div class="live-history-wrap">
+            <div class="chart-title">Recent automation runs</div>
+            <div id="automationHistory" class="live-history empty-state">No automation runs saved yet.</div>
+          </div>
+        </section>
+
+        <section class="panel api-panel" id="realtimeApiPanel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Real-time API testing</p>
+              <h3>Run live API checks</h3>
+            </div>
+            <span class="live-pill" id="apiRunStatus">No run yet</span>
+          </div>
+
+          <div class="live-grid">
+            <form id="apiTestForm" class="live-form">
+              <label>
+                Suite Name
+                <input id="apiSuiteName" type="text" value="Local QA API smoke" required>
+              </label>
+
+              <label>
+                Base URL
+                <input id="apiBaseUrl" type="url" value="http://127.0.0.1:5000" required>
+              </label>
+
+              <div class="field-grid">
+                <label>
+                  Engine
+                  <select id="apiEngine">
+                    <option value="playwright" selected>Playwright API</option>
+                    <option value="http">HTTP Client</option>
+                    <option value="selenium">Selenium Browser Fetch</option>
+                  </select>
+                </label>
+                <label>
+                  Timeout
+                  <select id="apiTimeout">
+                    <option value="5000">5 seconds</option>
+                    <option value="10000" selected>10 seconds</option>
+                    <option value="20000">20 seconds</option>
+                    <option value="30000">30 seconds</option>
+                  </select>
+                </label>
+              </div>
+
+              <label>
+                Suite Headers JSON
+                <textarea id="apiHeaders" rows="3">{
+  "Accept": "application/json"
+}</textarea>
+              </label>
+
+              <label>
+                API Requests
+                <textarea id="apiRequests" rows="12">GET /api/testing-types
+EXPECT_STATUS 200
+EXPECT_TEXT Functional Testing
+EXPECT_MAX_MS 2000
+
+GET /api/analytics
+EXPECT_STATUS 200
+EXPECT_JSON analytics.total = 13</textarea>
+              </label>
+
+              <button class="primary-button" id="runApiTestBtn" type="submit">Run API Test</button>
+            </form>
+
+            <div class="live-output">
+              <div id="apiSummary" class="live-summary empty-state">Create an API suite and run live checks.</div>
+              <div id="apiResults" class="live-results"></div>
+            </div>
+          </div>
+
+          <div class="live-history-wrap">
+            <div class="chart-title">Recent API test runs</div>
+            <div id="apiHistory" class="live-history empty-state">No API test runs saved yet.</div>
+          </div>
+        </section>
+
+        <section class="workspace" id="manualTestingPanel">
+          <div class="panel form-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Case editor</p>
+                <h3 id="formTitle">Create test case</h3>
+              </div>
+              <button class="ghost-button compact" id="clearFormBtn" type="button">New</button>
+            </div>
+
+            <form id="caseForm">
+              <input type="hidden" id="caseId">
+
+              <label>
+                Title
+                <input id="title" name="title" type="text" placeholder="Example: Validate login success" required>
+              </label>
+
+              <div class="field-grid">
+                <label>
+                  Testing Type
+                  <select id="testingType" name="testing_type" required></select>
+                </label>
+                <label>
+                  Status
+                  <select id="status" name="status" required></select>
+                </label>
+              </div>
+
+              <div class="field-grid">
+                <label>
+                  Priority
+                  <select id="priority" name="priority" required></select>
+                </label>
+                <label>
+                  Automation
+                  <select id="automation" name="automation" required></select>
+                </label>
+              </div>
+
+              <div class="field-grid">
+                <label>
+                  Owner
+                  <input id="owner" name="owner" type="text" placeholder="QA Team">
+                </label>
+                <label>
+                  Environment
+                  <input id="environment" name="environment" type="text" placeholder="Staging / Chrome">
+                </label>
+              </div>
+
+              <label>
+                Business Requirement
+                <textarea id="requirement" name="requirement" rows="3" required></textarea>
+              </label>
+
+              <label>
+                Test Steps
+                <textarea id="steps" name="steps" rows="4" required></textarea>
+              </label>
+
+              <label>
+                Expected Result
+                <textarea id="expectedResult" name="expected_result" rows="3" required></textarea>
+              </label>
+
+              <label>
+                Actual Result / Notes
+                <textarea id="actualResult" name="actual_result" rows="3"></textarea>
+              </label>
+
+              <label>
+                Tags
+                <input id="tags" name="tags" type="text" placeholder="login, regression, api">
+              </label>
+
+              <div class="form-actions">
+                <button class="primary-button" type="submit">Save Case</button>
+                <button class="ghost-button" id="deleteCaseBtn" type="button" disabled>Delete</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="content-column">
+            <section class="panel">
+              <div class="panel-header">
+                <div>
+                  <p class="eyebrow">Analysis</p>
+                  <h3>Coverage and status</h3>
+                </div>
+                <span class="live-pill" id="caseCountPill">0 cases</span>
+              </div>
+              <div class="charts">
+                <div>
+                  <div class="chart-title">Status distribution</div>
+                  <div id="statusBars" class="bar-list"></div>
+                </div>
+                <div>
+                  <div class="chart-title">Testing type coverage</div>
+                  <div id="typeBars" class="bar-list dense"></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-header list-header">
+                <div>
+                  <p class="eyebrow">Cases</p>
+                  <h3>Execution board</h3>
+                </div>
+                <div class="view-tabs" role="tablist" aria-label="Case views">
+                  <button class="tab active" id="tableViewBtn" type="button">Table</button>
+                  <button class="tab" id="boardViewBtn" type="button">Board</button>
+                </div>
+              </div>
+
+              <div class="filters" aria-label="Case filters">
+                <input id="searchInput" type="search" placeholder="Search cases, tags, owners">
+                <select id="filterType"></select>
+                <select id="filterStatus"></select>
+                <select id="filterPriority"></select>
+                <select id="filterAutomation"></select>
+                <button class="ghost-button compact" id="clearFiltersBtn" type="button">Clear</button>
+              </div>
+
+              <div id="tableView" class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Case</th>
+                      <th>Type</th>
+                      <th>Status</th>
+                      <th>Priority</th>
+                      <th>Owner</th>
+                      <th>Automation</th>
+                    </tr>
+                  </thead>
+                  <tbody id="caseTableBody"></tbody>
+                </table>
+              </div>
+
+              <div id="boardView" class="board hidden"></div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <button class="back-to-top hidden" id="backToTopBtn" type="button" aria-label="Back to top" title="Back to top">
+      <span aria-hidden="true">↑</span>
+    </button>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+{% extends "site_base.html" %}
+
+{% block title %}Sign In | Demo QA Site{% endblock %}
+
+{% block content %}
+  <section class="form-page">
+    <div class="copy-block">
+      <p class="eyebrow">Registration</p>
+      <h1>Sign In / Create Account</h1>
+      <p>
+        This page creates a real SQLite user record. Use it for signup validation,
+        duplicate email checks, password rules, and database testing.
+      </p>
+    </div>
+
+    <form class="auth-form" id="signin-form" method="post" action="{{ url_for('demo_signin') }}">
+      {% if error %}
+        <div class="alert error" id="signin-error">{{ error }}</div>
+      {% endif %}
+
+      <label>
+        Full Name
+        <input id="signin-name" name="name" type="text" value="{{ form.name }}" placeholder="Alex Tester" required>
+      </label>
+
+      <label>
+        Email
+        <input id="signin-email" name="email" type="email" value="{{ form.email }}" placeholder="alex@example.com" required>
+      </label>
+
+      <label>
+        Password
+        <input id="signin-password" name="password" type="password" minlength="8" placeholder="At least 8 characters" required>
+      </label>
+
+      <label>
+        Confirm Password
+        <input id="signin-confirm-password" name="confirm_password" type="password" minlength="8" required>
+      </label>
+
+      <button class="primary-button" id="signin-submit" type="submit">Create Account</button>
+      <a class="form-link" href="{{ url_for('demo_login') }}">Already have an account?</a>
+    </form>
+  </section>
+{% endblock %}

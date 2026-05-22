@@ -1,0 +1,29 @@
+{% extends "site_base.html" %}
+
+{% block title %}About | Demo QA Site{% endblock %}
+
+{% block content %}
+  <section class="content-page">
+    <p class="eyebrow">About</p>
+    <h1>About this testing website</h1>
+    <p>
+      This demo site exists so the QA Test Manager can test real pages instead of
+      only storing written test cases. It has navigation, authentication, forms,
+      buttons, protected pages, and SQLite-backed data.
+    </p>
+    <div class="feature-grid">
+      <article>
+        <h2>Functional flows</h2>
+        <p>Validate login, signup, contact submission, dashboard redirect, and navigation.</p>
+      </article>
+      <article>
+        <h2>Security checks</h2>
+        <p>Try invalid credentials, injection strings, and protected URL access.</p>
+      </article>
+      <article>
+        <h2>Compatibility checks</h2>
+        <p>Open the pages across browsers and screen sizes to verify layout stability.</p>
+      </article>
+    </div>
+  </section>
+{% endblock %}

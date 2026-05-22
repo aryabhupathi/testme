@@ -1,0 +1,29 @@
+{% extends "site_base.html" %}
+
+{% block title %}Services | Demo QA Site{% endblock %}
+
+{% block content %}
+  <section class="content-page">
+    <p class="eyebrow">Services</p>
+    <h1>Services for testing buttons and page content</h1>
+    <p>
+      Each service has a button that reveals extra content. Use this page for
+      button click automation, expected text checks, and navigation testing.
+    </p>
+
+    <div class="service-grid">
+      {% for service in services %}
+        <article class="service-card" id="{{ service.slug }}">
+          <h2>{{ service.name }}</h2>
+          <p>{{ service.summary }}</p>
+          <button class="secondary-button service-toggle" type="button" data-service="{{ service.slug }}">
+            More Details
+          </button>
+          <p class="service-detail" id="{{ service.slug }}-detail" hidden>
+            {{ service.name }} includes planning, execution, reporting, and saved evidence for QA review.
+          </p>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

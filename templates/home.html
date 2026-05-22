@@ -1,0 +1,42 @@
+{% extends "site_base.html" %}
+
+{% block title %}Home | Demo QA Site{% endblock %}
+
+{% block content %}
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Testing playground</p>
+      <h1>Home page for real QA automation</h1>
+      <p class="lead">
+        Use this demo website to test login, signup, navigation, forms, buttons,
+        database storage, page scanning, and browser automation.
+      </p>
+      <div class="hero-actions">
+        <a class="primary-link" id="start-login-link" href="{{ url_for('demo_login') }}">Test Login</a>
+        <a class="secondary-link" id="services-link" href="{{ url_for('demo_services') }}">View Services</a>
+      </div>
+    </div>
+    <div class="status-panel" aria-label="Demo database stats">
+      <strong>SQLite demo data</strong>
+      <span>{{ stats.users }} users</span>
+      <span>{{ stats.messages }} contact messages</span>
+      <span>{{ stats.login_attempts }} login attempts</span>
+      <span>{{ stats.services }} services</span>
+    </div>
+  </section>
+
+  <section class="feature-grid">
+    <article>
+      <h2>Manual testing</h2>
+      <p>Create cases in the QA manager, test this page by hand, and update status.</p>
+    </article>
+    <article>
+      <h2>Live page checks</h2>
+      <p>Scan `/home`, `/login`, `/signin`, `/about`, `/services`, and `/contact`.</p>
+    </article>
+    <article>
+      <h2>Automation testing</h2>
+      <p>Run Playwright steps against these pages and save the result history.</p>
+    </article>
+  </section>
+{% endblock %}

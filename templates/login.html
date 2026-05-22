@@ -1,0 +1,38 @@
+{% extends "site_base.html" %}
+
+{% block title %}Login | Demo QA Site{% endblock %}
+
+{% block content %}
+  <section class="form-page">
+    <div class="copy-block">
+      <p class="eyebrow">Authentication</p>
+      <h1>Login</h1>
+      <p>
+        Test successful login, wrong password, empty fields, SQL-injection strings,
+        redirect behavior, and protected dashboard access.
+      </p>
+      <p class="test-credential">
+        Demo account: <strong>tester@example.com</strong> / <strong>Password123!</strong>
+      </p>
+    </div>
+
+    <form class="auth-form" id="login-form" method="post" action="{{ url_for('demo_login') }}">
+      {% if error %}
+        <div class="alert error" id="login-error">{{ error }}</div>
+      {% endif %}
+
+      <label>
+        Email
+        <input id="login-email" name="email" type="email" value="{{ email }}" placeholder="tester@example.com" required>
+      </label>
+
+      <label>
+        Password
+        <input id="login-password" name="password" type="password" placeholder="Password123!" required>
+      </label>
+
+      <button class="primary-button" id="login-submit" type="submit">Login</button>
+      <a class="form-link" href="{{ url_for('demo_signin') }}">Create a new account</a>
+    </form>
+  </section>
+{% endblock %}

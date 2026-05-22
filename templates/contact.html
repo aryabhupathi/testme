@@ -1,0 +1,43 @@
+{% extends "site_base.html" %}
+
+{% block title %}Contact | Demo QA Site{% endblock %}
+
+{% block content %}
+  <section class="form-page">
+    <div class="copy-block">
+      <p class="eyebrow">Contact</p>
+      <h1>Contact the QA team</h1>
+      <p>
+        This form stores messages in SQLite. Use it for form validation, database
+        testing, success messages, and automation form submission.
+      </p>
+    </div>
+
+    <form class="auth-form" id="contact-form" method="post" action="{{ url_for('demo_contact') }}">
+      {% if error %}
+        <div class="alert error" id="contact-error">{{ error }}</div>
+      {% endif %}
+      {% if success %}
+        <div class="alert success" id="contact-success">{{ success }}</div>
+      {% endif %}
+
+      <label>
+        Name
+        <input id="contact-name" name="name" type="text" value="{{ form.name }}" placeholder="QA Tester" required>
+      </label>
+
+      <label>
+        Email
+        <input id="contact-email" name="email" type="email" value="{{ form.email }}" placeholder="qa@example.com" required>
+      </label>
+
+      <label>
+        Message
+        <textarea id="contact-message" name="message" rows="5" placeholder="Tell us what you want to test" required>{{ form.message }}</textarea>
+        <span class="char-count" id="message-count">0 characters</span>
+      </label>
+
+      <button class="primary-button" id="contact-submit" type="submit">Send Message</button>
+    </form>
+  </section>
+{% endblock %}
