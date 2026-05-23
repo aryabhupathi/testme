@@ -641,6 +641,16 @@ def create_app() -> Flask:
         pages = parse_line_values(payload.get("pages", ""))
         expected_keywords = parse_line_values(payload.get("expected_keywords", ""))
         check_links = bool(payload.get("check_links", True))
+        from urllib.parse import urlparse
+
+current_host = request.host
+
+target_host = urlparse(base_url).netloc
+
+if current_host == target_host:
+    return jsonify({
+        "error": "Self-testing the same Railway app is blocked to prevent worker deadlocks."
+    }), 400
         if not base_url:
             return jsonify({"error": "Base URL is required"}), 400
         parsed_base = urlparse(base_url)
